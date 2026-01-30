@@ -1,0 +1,269 @@
+{% extends 'store/main.html' %}
+{% load static %}
+
+{% block content %}
+	
+<div class="container login-register-container">
+    <!-- Login/Register Tabs -->
+    <div class="auth-tabs">
+        <button class="auth-tab active" id="loginTab">LOG IN</button>
+        <button class="auth-tab" id="registerTab">REGISTER</button>
+    </div>
+    
+    <!-- Django Messages -->
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- Success Message (for AJAX operations) -->
+    <div class="alert alert-success" id="successMessage" style="display: none;">
+        Operation successful!
+    </div>
+    
+    <!-- Login Form (Visible by default) -->
+    <div class="auth-form" id="loginForm">
+        <h2 class="form-title">LOG IN TO YOUR ACCOUNT</h2>
+        
+        <!-- Django Form Errors -->
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <div class="alert alert-danger" id="loginError" style="display: none;">
+            Invalid email or password. Please try again.
+        </div>
+        
+        <!-- Django Form -->
+        <form method="POST" action="{% url 'login' %}" id="loginFormElement">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+            
+            <div class="form-group">
+                <label for="loginEmail">Email Address</label>
+                <input type="email" class="form-control" id="loginEmail" name="email" 
+                       placeholder="Enter your email" required
+                       value="{% if form.email.value %}{{ form.email.value }}{% endif %}">
+            </div>
+            
+            <div class="form-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" class="form-control" id="loginPassword" name="password" 
+                       placeholder="Enter your password" required>
+            </div>
+            
+            <div class="form-group">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="rememberMe" name="remember_me">
+                    <label class="form-check-label" for="rememberMe">Remember me</label>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-auth">LOG ON</button>
+            
+            <div class="text-center mt-3">
+                <a href="#" class="text-muted">Forgot password?</a>
+            </div>
+        </form>
+        
+        <!-- Alternative AJAX Login (optional) -->
+        <div class="text-center mt-3">
+            <button type="button" class="btn btn-link" onclick="demoLogin()">Try Demo Login</button>
+        </div>
+    </div>
+    
+    <!-- Register Form (Hidden by default) -->
+    <div class="auth-form" id="registerForm" style="display: none;">
+        <h2 class="form-title">CREATE NEW ACCOUNT</h2>
+        
+        <!-- Django Form Errors -->
+        {% if register_form and register_form.errors %}
+        <div class="alert alert-danger">
+            {% for field, errors in register_form.errors.items %}
+                {% for error in errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <div class="alert alert-danger" id="registerError" style="display: none;">
+            Please fill all required fields correctly.
+        </div>
+        
+        <!-- Django Form -->
+        <form method="POST" action="{% url 'register' %}" id="registerFormElement">
+            {% csrf_token %}
+            
+            <div class="two-columns">
+                <div class="form-group">
+                    <label for="firstName">First Name *</label>
+                    <input type="text" class="form-control" id="firstName" name="first_name" 
+                           placeholder="Enter first name" required
+                           value="{% if register_form.first_name.value %}{{ register_form.first_name.value }}{% endif %}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="middleName">Middle Name</label>
+                    <input type="text" class="form-control" id="middleName" name="middle_name" 
+                           placeholder="Enter middle name (optional)"
+                           value="{% if register_form.middle_name.value %}{{ register_form.middle_name.value }}{% endif %}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="lastName">Last Name *</label>
+                    <input type="text" class="form-control" id="lastName" name="last_name" 
+                           placeholder="Enter last name" required
+                           value="{% if register_form.last_name.value %}{{ register_form.last_name.value }}{% endif %}">
+            </div>
+            
+            <div class="two-columns">
+                <div class="form-group">
+                    <label for="email1">Email 1 *</label>
+                    <input type="email" class="form-control" id="email1" name="email" 
+                           placeholder="Primary email address" required
+                           value="{% if register_form.email.value %}{{ register_form.email.value }}{% endif %}">
+                    {% if register_form.email.errors %}
+                    <small class="text-danger">{{ register_form.email.errors.0 }}</small>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="email2">Email 2</label>
+                    <input type="email" class="form-control" id="email2" name="email2" 
+                           placeholder="Secondary email (optional)"
+                           value="{% if register_form.email2.value %}{{ register_form.email2.value }}{% endif %}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="companyId">Company ID *</label>
+                <input type="text" class="form-control" id="companyId" name="company_id" 
+                       placeholder="Enter your company ID" required
+                       value="{% if register_form.company_id.value %}{{ register_form.company_id.value }}{% endif %}">
+            </div>
+            
+            <div class="two-columns">
+                <div class="form-group">
+                    <label for="password">Password *</label>
+                    <input type="password" class="form-control" id="password" name="password1" 
+                           placeholder="Create password" required>
+                    <small class="form-text text-muted">Minimum 8 characters with letters and numbers</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password *</label>
+                    <input type="password" class="form-control" id="confirmPassword" name="password2" 
+                           placeholder="Confirm password" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="termsAgreement" name="terms_agreement" required>
+                    <label class="form-check-label" for="termsAgreement">
+                        I agree to the <a href="#" class="text-primary">Terms of Service</a> and <a href="#" class="text-primary">Privacy Policy</a>
+                    </label>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-auth">REGISTER</button>
+        </form>
+    </div>
+</div>
+
+<!-- Initialize based on form errors -->
+{% if register_form and register_form.errors %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // If there are registration errors, show the register form
+        showRegisterForm();
+    });
+</script>
+{% endif %}
+
+{% if form.errors %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // If there are login errors, show the login form
+        showLoginForm();
+    });
+</script>
+{% endif %}
+
+<!-- Main JavaScript -->
+<script>
+    console.log('Login page JavaScript loaded');
+    
+    // Tab Switching Functions
+    function showLoginForm() {
+        console.log('Showing login form');
+        // Update tabs
+        document.getElementById('loginTab').classList.add('active');
+        document.getElementById('registerTab').classList.remove('active');
+        
+        // Show login form, hide register form
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('registerForm').style.display = 'none';
+        
+        // Clear any error messages
+        document.getElementById('loginError').style.display = 'none';
+    }
+    
+    function showRegisterForm() {
+        console.log('Showing register form');
+        // Update tabs
+        document.getElementById('registerTab').classList.add('active');
+        document.getElementById('loginTab').classList.remove('active');
+        
+        // Show register form, hide login form
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('registerForm').style.display = 'block';
+        
+        // Clear any error messages
+        document.getElementById('registerError').style.display = 'none';
+    }
+    
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded, setting up tabs');
+        
+        // Setup tab click events
+        document.getElementById('loginTab').addEventListener('click', showLoginForm);
+        document.getElementById('registerTab').addEventListener('click', showRegisterForm);
+        
+        // Check which form to show initially
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('show') === 'register') {
+            console.log('URL shows register');
+            showRegisterForm();
+        } else {
+            console.log('Defaulting to login');
+            showLoginForm();
+        }
+    });
+    
+    // Demo login function
+    function demoLogin() {
+        // Pre-fill demo credentials
+        document.getElementById('loginEmail').value = 'demo@example.com';
+        document.getElementById('loginPassword').value = 'demopassword123';
+    }
+</script>
+
+{% endblock content %}

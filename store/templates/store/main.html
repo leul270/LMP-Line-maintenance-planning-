@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+	<title>Ecom</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+	<script type="text/javascript">
+		var user = '{{request.user}}'
+
+		function getToken(name) {
+		    var cookieValue = null;
+		    if (document.cookie && document.cookie !== '') {
+		        var cookies = document.cookie.split(';');
+		        for (var i = 0; i < cookies.length; i++) {
+		            var cookie = cookies[i].trim();
+		            // Does this cookie string begin with the name we want?
+		            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+		                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+		                break;
+		            }
+		        }
+		    }
+		    return cookieValue;
+		}
+		var csrftoken = getToken('csrftoken')
+
+		function getCookie(name) {
+		    // Split cookie string and get all individual name=value pairs in an array
+		    var cookieArr = document.cookie.split(";");
+
+		    // Loop through the array elements
+		    for(var i = 0; i < cookieArr.length; i++) {
+		        var cookiePair = cookieArr[i].split("=");
+
+		        /* Removing whitespace at the beginning of the cookie name
+		        and compare it with the given string */
+		        if(name == cookiePair[0].trim()) {
+		            // Decode the cookie value and return
+		            return decodeURIComponent(cookiePair[1]);
+		        }
+		    }
+
+		    // Return null if not found
+		    return null;
+		}
+		var cart = JSON.parse(getCookie('cart'))
+
+		if (cart == undefined){
+			cart = {}
+			console.log('Cart Created!', cart)
+			document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
+		}
+		console.log('Cart:', cart)
+	
+	</script>
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{% url 'home' %}">LMP</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item {% if request.path == '/' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'home' %}">HOME {% if request.path == '/' %}<span class="sr-only">(current)</span>{% endif %}</a>
+            </li>
+            
+            <!-- Only show these menu items if user is logged in -->
+            {% if user.is_authenticated %}
+            <li class="nav-item {% if '/indexGen/' in request.path %}active{% endif %}">
+                <a class="nav-link" href="{% url 'indexGen' %}">INDEXGEN {% if '/indexGen/' in request.path %}<span class="sr-only">(current)</span>{% endif %}</a>
+            </li>
+            
+            <li class="nav-item {% if '/maintX/' in request.path %}active{% endif %}">
+                <a class="nav-link" href="{% url 'maintX' %}">MAINTX {% if '/maintX/' in request.path %}<span class="sr-only">(current)</span>{% endif %}</a>
+            </li>
+            
+            <li class="nav-item {% if '/mycourse/' in request.path %}active{% endif %}">
+                <a class="nav-link" href="{% url 'mycourse' %}">MYCOURSE {% if '/mycourse/' in request.path %}<span class="sr-only">(current)</span>{% endif %}</a>
+            </li>
+            {% endif %}
+        </ul>
+        
+        <div class="form-inline my-2 my-lg-0">
+            {% if user.is_authenticated %}
+                <!-- Display user info and logout when logged in -->
+                <div class="dropdown">
+                    <button class="btn btn-success dropdown-toggle mr-3" type="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {% if user.first_name and user.last_name %}
+                            {{ user.first_name }} {{ user.last_name }}
+                        {% else %}
+                            {{ user.email }}
+                        {% endif %}
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="#">
+                            <i class="fas fa-user mr-2"></i>Profile
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            <i class="fas fa-cog mr-2"></i>Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'logout' %}">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Simple logout button alternative -->
+                <!-- <span class="text-light mr-3">
+                    Welcome, 
+                    {% if user.first_name %}
+                        {{ user.first_name }}
+                    {% else %}
+                        {{ user.email }}
+                    {% endif %}
+                </span>
+                <a href="{% url 'logout' %}" class="btn btn-outline-light">Logout</a> -->
+            {% else %}
+                <!-- Display login/register when not logged in -->
+                <a href="{% url 'login' %}" class="btn btn-warning mr-2">Login</a>
+                <a href="{% url 'login' %}?show=register" class="btn btn-outline-light">Register</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<!-- Django Messages Display -->
+<div class="container mt-3">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<div class="container">
+    <br>
+    {% block content %}
+
+    {% endblock content %}
+</div>
+
+<footer class="footer bg-dark text-white py-4 mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <p class="mb-0">LINE MAINTENANCE OFFICE(MAINTENANCE CONTROL CENTER)</p>
+                {% if user.is_authenticated %}
+                <small class="text-muted">Logged in as: {{ user.email }}</small>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Font Awesome for icons -->
+<script src="https://kit.fontawesome.com/your-font-awesome-kit.js" crossorigin="anonymous"></script>
+<!-- Or use CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+
+<!-- Custom JavaScript for user interactions -->
+<script type="text/javascript">
+    // Auto-dismiss alerts after 5 seconds
+    $(document).ready(function() {
+        setTimeout(function() {
+            $('.alert').alert('close');
+        }, 5000);
+        
+        // Handle active navigation highlighting
+        $('.nav-item a').each(function() {
+            if ($(this).attr('href') === window.location.pathname) {
+                $(this).parent().addClass('active');
+            }
+        });
+        
+        // Logout confirmation
+        $('a[href*="logout"]').on('click', function(e) {
+            if (!confirm('Are you sure you want to logout?')) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+</body>
+</html>

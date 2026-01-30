@@ -1,0 +1,36 @@
+{% extends 'store/main.html' %}
+{% load static %}
+
+{% block content %}
+	
+	<!-- Create Course Button Section -->
+	<div class="create-course-section text-center py-4 mb-4">
+		<a href="{% url 'create_course' %}" class="btn btn-create-course">
+			<i class="fas fa-plus-circle me-2"></i>Create Course
+		</a>
+	</div>
+	<div class="row">
+		{% for course in courses %}  <!-- Changed from Course to courses -->
+		<div class="col-lg-4">
+			<img class="thumbnail" src="{{ course.get_image_url }}">
+		
+			<div class="box-element product">
+				<h6><strong>{{ course.course_name }}</strong></h6>
+				
+				<hr>
+
+				<div style="display: flex; gap:1em; justify-content: space-between;">
+					<div>
+					
+						<a class="btn btn-outline-success" href="#">View</a>		
+					</div>
+				
+					<h4><strong>2 years</strong></h4>
+					<p>{{ course.due_date }}</p>  <!-- Added paragraph tag -->
+				</div>
+			</div>
+		</div>  <!-- Moved this div closing tag -->
+		{% endfor %}
+	</div>
+	
+{% endblock content %}

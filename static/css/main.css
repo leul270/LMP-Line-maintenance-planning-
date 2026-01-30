@@ -1,0 +1,371 @@
+body{
+	background-color: hsl(0, 0%, 98%);
+}
+h1,h2,h3,h4,h5,h6{
+	color:hsl(0, 0%, 30%);
+}
+.box-element{
+	box-shadow:hsl(0, 0%, 80%) 0 0 16px;
+	background-color: #fff;
+	border-radius: 4px;
+	padding: 10px;
+}
+.thumbnail{
+	width: 100%;
+	height: 200px;
+	-webkit-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+    -moz-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+    box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+}
+.product{
+	border-radius: 0 0 4px 4px;
+}
+
+.bg-dark{
+	background-color: #4f868c!important;
+}
+
+#cart-icon{
+	width:25px;
+	display: inline-block;
+	margin-left: 15px;
+}
+
+#cart-total{
+	display: block;
+	text-align: center;
+	color:#fff;
+	background-color: red;
+	width: 20px;
+	height: 25px;
+	border-radius: 50%;
+	font-size: 14px;
+}
+
+.col-lg-4, .col-lg-6, .col-lg-8, .col-lg-12{
+	margin-top: 10px;
+}
+
+.btn{
+	border-radius: 0;
+}
+
+.row-image{
+	width: 100px;
+}
+
+.form-field{
+	width:250px;
+	display: inline-block;
+	padding: 5px;
+}
+
+.cart-row{
+	display: flex;
+    align-items: flex-stretch;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ececec;
+
+}
+
+.quantity{
+	display: inline-block;
+	font-weight: 700;
+	padding-right:10px;
+}
+.chg-quantity{
+	width: 12px;
+	cursor: pointer;
+	display: block;
+	margin-top: 5px;
+	transition:.1s;
+}
+.chg-quantity:hover{
+	opacity: .6;
+}
+.hidden{
+	display: none!important;
+}
+/* Footer styling */
+.footer {
+    background-color: #4f868c!important; /* Same as navbar */
+    padding: 15px 0; /* Similar padding to navbar */
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: auto; /* Pushes footer to bottom if using flex */
+}
+.footer p {
+    color: white;
+    font-size: 1rem;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+/* Make body a flex container to push footer down */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.main-content {
+    flex: 1; /* This will make the main content expand */
+}
+/* Login/Register Page Styles */
+.login-register-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+}
+
+.auth-tabs {
+    display: flex;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.auth-tab {
+    flex: 1;
+    text-align: center;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #666;
+    border: none;
+    background: none;
+    transition: all 0.3s ease;
+}
+
+.auth-tab.active {
+    color: #4f868c;
+    border-bottom: 3px solid #4f868c;
+    background-color: rgba(79, 134, 140, 0.1);
+}
+
+.auth-form {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+    color: #4f868c;
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 12px 15px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    border-color: #4f868c;
+    box-shadow: 0 0 0 0.2rem rgba(79, 134, 140, 0.25);
+}
+
+.btn-auth {
+    background-color: #4f868c;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 4px;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.btn-auth:hover {
+    background-color: #3a6a70;
+    color: white;
+}
+
+.alert {
+    border-radius: 4px;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Two-column layout for register form */
+.two-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+@media (max-width: 768px) {
+    .two-columns {
+        grid-template-columns: 1fr;
+    }
+    
+    .auth-form {
+        padding: 20px;
+    }
+}
+.login-register-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.auth-tabs {
+    display: flex;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 15px;
+    background: none;
+    border: none;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: #6c757d;
+}
+
+.auth-tab.active {
+    color: #007bff;
+    border-bottom: 3px solid #007bff;
+}
+
+.auth-tab:hover:not(.active) {
+    color: #495057;
+}
+
+.auth-form {
+    padding: 20px 0;
+}
+
+.form-title {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #343a40;
+}
+
+.btn-auth {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-auth:hover {
+    background-color: #0056b3;
+}
+
+.two-columns {
+    display: flex;
+    gap: 15px;
+}
+
+.two-columns .form-group {
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .two-columns {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .login-register-container {
+        margin: 20px;
+        padding: 20px;
+    }
+}
+/* Make body a flex container to push footer down */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.main-content {
+    flex: 1; /* This will make the main content expand */
+}
+/* Create Course Button Styles */
+.create-course-section {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin: 20px 0;
+    padding: 25px 15px;
+    border: 2px dashed #dee2e6;
+    transition: all 0.3s ease;
+}
+.create-course-section:hover {
+    background-color: rgba(79, 134, 140, 0.05);
+    border-color: #4f868c;
+}
+
+.btn-create-course {
+    background-color: #4f868c;
+    color: white;
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 6px;
+    border: none;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 200px;
+    box-shadow: 0 4px 12px rgba(79, 134, 140, 0.2);
+}
+
+.btn-create-course:hover {
+    background-color: #3a6a70;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(79, 134, 140, 0.3);
+}
+
+.btn-create-course:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(79, 134, 140, 0.2);
+}
+
+.btn-create-course i {
+    font-size: 20px;
+}
